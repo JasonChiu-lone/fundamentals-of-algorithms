@@ -1,7 +1,7 @@
 ﻿/*
 ## 编程题＃1： 完美覆盖
 
-[来源: POJ](http://cxsjsx.openjudge.cn/mooc2015test/f/) (Coursera声明：在POJ上完成的习题将不会计入Coursera的最后成绩。)
+[来源: POJ](http://bailian.openjudge.cn/practice/2663/) (Coursera声明：在POJ上完成的习题将不会计入Coursera的最后成绩。)
 
 **注意： 总时间限制: 1000ms 内存限制: 65536kB**
 
@@ -43,6 +43,8 @@ n 的值最大不超过 30.
 153
 2131
 ```
+
+解析：[CSDN](https://blog.csdn.net/NNNNNNNNNNNNY/article/details/51596216)
 */
 #include <iostream>
 #include <iomanip>
@@ -59,6 +61,9 @@ n 的值最大不超过 30.
 #include <functional>
 using namespace std;
 
+
+/************************************************
+ * 暴力递归会超时捏
 int n;
 int answers[30];
 
@@ -83,7 +88,7 @@ int is_left_rect(bool board[5][32]){
     bool ret = true;
     for (int i = 1; i < 4; i++){
         for (int j = 1; j <= n; j++){
-            if (i < left_x) ret &= board[i][j];
+            if (j < left_x) ret &= board[i][j];
             else ret ^= board[i][j];
             if (!ret) return false;
         }
@@ -97,7 +102,7 @@ int solve(bool board[5][32], int last_i, int last_j, int ans){
     // shortcut
     int rect_width = is_left_rect(board);
     if (rect_width && answers[rect_width-1] != -1){
-        cout << "this is helping" << endl;
+        // cout << "this is helping" << endl;
         return answers[rect_width-1];
     }
     // 终止条件1：棋盘被填满
@@ -137,39 +142,12 @@ int solve(bool board[5][32], int last_i, int last_j, int ans){
                     board_[i][j] = 0;
                     board_[i][j+1] = 0;
                 }
-                
             }
         }
     }
-    /*
-    for (int i = last_i; i < 4; i++){
-        int j = (i == last_i)?(last_j):1;
-        for (; j <= n; j++){
-            if (board[i][j] == 0){ // 棋盘在(i, j)处空白
-                if (board[i][j+1] == 0){ // 可以横着摆
-                    board_[i][j] = 1;
-                    board_[i][j+1] = 1;
-                    ret += solve(board_, i, j, ans);
-                    // recover board
-                    board_[i][j] = 0;
-                    board_[i][j+1] = 0;
-                }
-                if (board[i+1][j] == 0){ // 可以竖着摆
-                    board_[i][j] = 1;
-                    board_[i+1][j] = 1;
-                    ret += solve(board_, i, j, ans);
-                    // recover board
-                    board_[i][j] = 0;
-                    board_[i+1][j] = 0;
-                }
-            }
-        }
-    }*/
     if(rect_width) answers[rect_width-1] = ret;
     return ans * ret;
 }
-
-
 
 int main(){
     memset(answers, -1, sizeof(answers));
@@ -191,6 +169,31 @@ int main(){
 
         answers[n-1] = solve(board, 1, 1, 1);
         cout << answers[n-1] << endl;
+    }
+    return 0;
+}
+ * 
+ */
+
+long long f(int n){
+    if (n == 0) return 1;
+    if (n % 2) return 0;
+    if (n == 2) return 3;
+    // f(n)=3*f(n-2)+2*(f(n-4)+f(n-6)+...+f(2))+2 //
+    long long ret = 0;
+    ret += 3 * f(n-2);
+    for (int i = n - 4; i >= 0; i -= 2){
+        ret += 2 * f(i);
+    }
+    return ret;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    while (n != -1){
+        cout << f(n) << endl;
+        cin >> n;
     }
     return 0;
 }
