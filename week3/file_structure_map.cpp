@@ -1,7 +1,7 @@
 ﻿/*
 ## 编程题＃2： 文件结构“图”
 
-[来源: POJ](http://cxsjsxmooc.openjudge.cn/test2/B/) (Coursera声明：在POJ上完成的习题将不会计入Coursera的最后成绩。)
+[来源: POJ](http://bailian.openjudge.cn/practice/2775/) (Coursera声明：在POJ上完成的习题将不会计入Coursera的最后成绩。)
 
 **注意： 总时间限制: 1000ms 内存限制: 65536kB**
 
@@ -83,3 +83,109 @@ file2
 
 一个目录和它的里面的文件处于同一层次
 */
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
+#include <algorithm>
+#include <functional>
+using namespace std;
+
+template<class T>
+bool file_cmp(T left, T right){
+    // cout << "Comparing " << left.file_name << " and " << right.file_name << endl;
+    // 目录优于文件，目录间不排序
+    if (left.file_type == 'f' && right.file_type == 'd') return false;
+    if (left.file_type == 'd' && right.file_type == 'f') return true;
+    if (left.file_type == 'd' && right.file_type == 'd') return false; 
+    return left.file_name < right.file_name;
+}
+
+class File{
+    public:
+        vector<File> sub_files;
+        File *parent_folder;
+        string file_name;
+        char file_type;
+        File(string file_name_, File *parent_folder_ = NULL){
+            file_name = file_name_;
+            parent_folder = parent_folder_;
+            if (parent_folder == NULL)
+                parent_folder = this;
+            file_type = file_name.c_str()[0];
+        }
+        
+        File *add_file(File f){
+            sub_files.push_back(f);
+            // sort(sub_files.begin(), sub_files.end(), file_cmp<File>);
+            if (f.file_type == 'd') return &sub_files[sub_files.size() - 1];
+            else if (f.file_type == 'R') return this;
+            else if (f.file_type == 'f') return this;
+            else return this;
+        }
+        void print_files(int recur_depth){
+            stable_sort(sub_files.begin(), sub_files.end(), file_cmp<File>);
+
+            // print the name of this folder
+            print_recur(recur_depth);
+            cout << file_name << endl;
+            // iterate each subfolder and subfile
+            vector<File>::iterator it = sub_files.begin();
+            for(; it != sub_files.end(); it++){
+                if (it->file_type == 'd'){
+                    it->print_files(recur_depth + 1);
+                }
+                else{
+                    // print names of subfiles
+                    print_recur(recur_depth);
+                    cout << it->file_name << endl;
+                }
+            }
+        }
+        void print_recur(int recur_depth){
+            for (int i = 0; i < recur_depth; i++){
+                cout << "|     ";
+            }
+        }
+        File *get_parent_folder(){
+            return parent_folder;
+        }
+};
+
+int main(){
+    int data_set_n = 1;
+    while (true){ // each dataset
+        string in;
+        
+        
+        File root("ROOT");
+        File *current_folder = &root;
+        while (true){ // each line of input
+            cin >> in;
+            if (in == "*") break;
+            if (in == "#"){
+                return 0;
+            }
+            if (in == "]"){
+                current_folder = current_folder->get_parent_folder();
+                continue;
+            }
+            current_folder = current_folder->add_file(File(in, current_folder));
+        }
+
+        cout << "DATA SET " << data_set_n << ":" << endl;
+        root.print_files(0);
+        cout << endl;
+
+        data_set_n += 1;
+    }
+    return 0;
+}
+
