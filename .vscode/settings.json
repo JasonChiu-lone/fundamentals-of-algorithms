@@ -1,7 +1,16 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "atomic": "cpp",
+        "charconv": "cpp",
+        "memory": "cpp",
+        "cstring": "cpp",
+        "xmemory": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "utility": "cpp",
+        "xlocale": "cpp"
     },
     "r.lsp.promptToInstall": false
 }
