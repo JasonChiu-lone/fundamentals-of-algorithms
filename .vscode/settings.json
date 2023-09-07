@@ -10,7 +10,9 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "utility": "cpp",
-        "xlocale": "cpp"
+        "xlocale": "cpp",
+        "ostream": "cpp",
+        "iosfwd": "cpp"
     },
     "r.lsp.promptToInstall": false
 }
