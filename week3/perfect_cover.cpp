@@ -53,10 +53,6 @@ n 的值最大不超过 30.
 #include <cstring>
 #include <vector>
 #include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <queue>
 #include <algorithm>
 #include <functional>
 using namespace std;
