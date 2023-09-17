@@ -1,4 +1,4 @@
-﻿// POJ 2456
+// POJ 2456
 
 #include <iostream>
 #include <iomanip>
@@ -13,6 +13,7 @@
 #include <queue>
 #include <algorithm>
 #include <functional>
+#include <stdio.h>
 using namespace std;
 
 #define MAXN 100000
